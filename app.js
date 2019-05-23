@@ -10,6 +10,10 @@ var eraseEvents = require('./routes/eraseEvents');
 var events = require('./routes/events');
 var actor = require('./routes/actor');
 
+const actorDao = require('./Dao/Actor');
+const eventDao = require('./Dao/Event');
+const repoDao = require('./Dao/Repo');
+
 var app = express();
 
 // view engine setup
@@ -47,5 +51,10 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+actorDao.createTable()
+  .then(() =>  repoDao.createTable())
+  .then(() => eventDao.createTable())
+  .then(() => app.listen(3000, () => console.log('App listening on 3000')));
 
 module.exports = app;

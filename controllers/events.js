@@ -1,28 +1,54 @@
+const actorDao = require('../Dao/Actor');
+const repoDao = require('../Dao/REPO');
+const eventDao = require('../Dao/Event');
 
-var getAllEvents = () => {
+class Events {
+	constructor() {}
 
-};
+	async addEvent(event) {
 
-var addEvent = () => {
+		let actor = event.actor;
+		let repo = event.repo;
 
-};
+		await actorDao.save(actor);
+		await repoDao.save(repo);
+		await eventDao.save(event);
 
+		return true;
+	}
 
-var getByActor = () => {
+	async getAllEvents() {
+		let events = await eventDao.getAll();
+		return this.formatResponse(events);
+	}
 
-};
+	eraseEvents() {
+		return eventDao.deleteAll();
+	}
 
+	async getByActor(actorID) {
+		let events = await eventDao.getEventsByActor(actorID);
+		return this.formatResponse(events);
+	}
 
-var eraseEvents = () => {
+	formatResponse(events) {
+		return events.map((event) => {
+			for(let key in event) {
+				if(key.indexOf('.') > -1) {
+					let portions = key.split('.');
+					if(!event[portions[0]]) {
+						event[portions[0]] = {};
+					}
+					event[portions[0]][portions[1]] = event[key];
+					delete event[key];
+				}
+			}
+			return event;
+		});
+	}
+}
 
-};
-
-module.exports = {
-	getAllEvents: getAllEvents,
-	addEvent: addEvent,
-	getByActor: getByActor,
-	eraseEvents: eraseEvents
-};
+module.exports  = new Events()
 
 
 

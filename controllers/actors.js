@@ -1,22 +1,32 @@
+const actorDao = require('../Dao/Actor');
 
-var getAllActors = () => {
+class Actor {
+	constructor() {};
+
+	updateActor({id, avatar_url}) {
+		return actorDao.update(id, avatar_url);
+	}
+
+	getAllActors() {
+		return actorDao.getActorsByEventCount();
+	}
+}
+
+
+// var getAllActors = () => {
 	
-};
+// };
 
-var updateActor = () => {
+// var updateActor = () => {
 
-};
+// };
 
-var getStreak = () => {
+// var getStreak = () => {
 
-};
+// };
 
 
-module.exports = {
-	updateActor: updateActor,
-	getAllActors: getAllActors,
-	getStreak: getStreak
-};
+module.exports = new Actor();
 
 
 
