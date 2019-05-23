@@ -7,12 +7,11 @@ var eventCtrl = require('../controllers/events');
 router.post('/', async (req, res) => {
     try {
         await eventCtrl.addEvent(req.body);
-        res.send(201, {
-            success: true
-        });
+        res.send(201, { success: true });
     } catch(e) {
         console.log(e);
         res.send(500);
+
     }
 
     

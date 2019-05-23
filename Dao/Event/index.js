@@ -1,7 +1,7 @@
 const Dao = require('..');
 const TABLE_NAME = 'events';
 const SELECT_QUERY = 
-  `SELECT events.id, type, created_at, actors.id as 'actor.id', 
+  `SELECT DISTINCT events.id, type, created_at, actors.id as 'actor.id', 
   login as 'actor.login', avatar_url as 'actor.avatar_url', 
   repos.id as 'repo.id', name as 'repo.name', url as 'repo.url' 
   FROM events 
@@ -16,7 +16,7 @@ class Event extends Dao {
 
     createTable() {
         const command = 
-          `CREATE TABLE ${TABLE_NAME} ( 
+          `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} ( 
             id INT PRIMARY KEY NOT NULL,
             type TEXT,
             created_at DATETIME,

@@ -8,19 +8,27 @@ class Actor extends Dao {
 
     createTable() {
         const command = `CREATE TABLE IF NOT EXISTS actors (
-            id INT NOT NULL,
+            id INT PRIMARY KEY NOT NULL,
             login TEXT,
             avatar_url TEXT
         )`;
         return this.run(command);
     }
 
-    save(actor) {
+    async save(actor) {
         const command = `INSERT INTO actors
         (id, login, avatar_url)
         VALUES (?,?,?)`;
 
-        return this.run(command, [actor.id, actor.login, actor.avatar_url]);
+        try {
+            return await this.run(command, [actor.id, actor.login, actor.avatar_url]);
+        } catch(e) {
+            if(e.code === 'SQLITE_CONSTRAINT') {
+                console.log(e);
+            } else {
+                throw e;
+            }
+        }
     }
 
     update(id, avatar_url) {
@@ -35,16 +43,16 @@ class Actor extends Dao {
 
     getActorsByEventCount() {
         const command =  
-        `SELECT DISTINCT 
+        `SELECT 
         actors.id as 'id', 
-        login, avatar_url
+        login, 
+        avatar_url
         FROM events 
         INNER JOIN actors ON events.fk_actorId = actors.id
-        WHERE actors.id IN (
-            SELECT fk_actorId from events
-            GROUP BY fk_actorId HAVING COUNT(*) > 0
-            ORDER BY fk_actorId DESC
-        ) ORDER BY created_at DESC`;
+        GROUP BY fk_actorId
+        ORDER BY COUNT(fk_actorId) DESC,
+        created_at DESC`;
+
         return this.all(command);
     }
 }

@@ -7,7 +7,7 @@ class Repo extends Dao {
 
     createTable() {
         const command = `CREATE TABLE IF NOT EXISTS repos (
-            id,
+            id INT PRIMARY KEY NOT NULL,
             name TEXT,
             url TEXT
         )`;
@@ -15,12 +15,20 @@ class Repo extends Dao {
         return this.run(command);
     }
 
-    save(repo) {
+    async save(repo) {
         const command = `INSERT INTO repos(
             id, name, url)
             VALUES (?,?,?)`;
 
-        return this.run(command, [repo.id, repo.name, repo.url]);
+        try {
+            return await this.run(command, [repo.id, repo.name, repo.url]);
+        } catch(e) {
+            if(e.code === 'SQLITE_CONSTRAINT') {
+                console.log(e);
+            } else {
+                throw e;
+            }
+        }    
     }
 }
 
