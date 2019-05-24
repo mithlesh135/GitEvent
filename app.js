@@ -10,9 +10,9 @@ var eraseEvents = require('./routes/eraseEvents');
 var events = require('./routes/events');
 var actor = require('./routes/actor');
 
-const actorDao = require('./Dao/Actor');
-const eventDao = require('./Dao/Event');
-const repoDao = require('./Dao/Repo');
+const actorDao = require('./Dao/actor');
+const eventDao = require('./Dao/event');
+const repoDao = require('./Dao/repo');
 
 var app = express();
 

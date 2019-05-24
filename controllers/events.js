@@ -1,6 +1,6 @@
-const actorDao = require('../Dao/Actor');
-const repoDao = require('../Dao/REPO');
-const eventDao = require('../Dao/Event');
+const actorDao = require('../Dao/actor');
+const repoDao = require('../Dao/repo');
+const eventDao = require('../Dao/event');
 
 class Events {
 	constructor() {}

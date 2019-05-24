@@ -1,4 +1,4 @@
-const actorDao = require('../Dao/Actor');
+const actorDao = require('../Dao/actor');
 const moment = require('moment');
 
 class Actor {
