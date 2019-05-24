@@ -1,7 +1,7 @@
 const Dao = require('..');
 const TABLE_NAME = 'events';
 const SELECT_QUERY = 
-  `SELECT DISTINCT events.id, type, created_at, actors.id as 'actor.id', 
+  `SELECT events.id, type, created_at, actors.id as 'actor.id', 
   login as 'actor.login', avatar_url as 'actor.avatar_url', 
   repos.id as 'repo.id', name as 'repo.name', url as 'repo.url' 
   FROM events 
@@ -44,8 +44,8 @@ class Event extends Dao {
   }
 
   deleteAll() {
-    const command = `DELETE FROM ${TABLE_NAME}`;
-    return this.run(command);
+    ['actors', 'repos', 'events'].forEach( tableName =>  this.db.run(`DELETE FROM ${tableName}`));
+    return true;
   }
 
   getEventsByActor(actorID) {

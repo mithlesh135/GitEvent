@@ -6,7 +6,6 @@ class Events {
 	constructor() {}
 
 	async addEvent(event) {
-
 		let actor = event.actor;
 		let repo = event.repo;
 

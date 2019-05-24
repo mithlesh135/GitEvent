@@ -45,4 +45,16 @@ router.get('/', async (req, res) => {
 
 });
 
+router.get('/streak', async (req, res) => {
+
+    try {
+        let result = await actorController.getStreak();
+        res.send(200, result);
+    } catch(e) {
+        console.log(e);
+        res.send(500);
+    }
+
+});
+
 module.exports = router;

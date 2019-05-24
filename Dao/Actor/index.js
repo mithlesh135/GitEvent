@@ -7,7 +7,7 @@ class Actor extends Dao {
     }
 
     createTable() {
-        const command = `CREATE TABLE IF NOT EXISTS actors (
+        const command = `CREATE TABLE IF NOT EXISTS ${TABLE_NAME} (
             id INT PRIMARY KEY NOT NULL,
             login TEXT,
             avatar_url TEXT
@@ -43,15 +43,25 @@ class Actor extends Dao {
 
     getActorsByEventCount() {
         const command =  
-        `SELECT 
-        actors.id as 'id', 
-        login, 
-        avatar_url
-        FROM events 
-        INNER JOIN actors ON events.fk_actorId = actors.id
-        GROUP BY fk_actorId
-        ORDER BY COUNT(fk_actorId) DESC,
-        created_at DESC`;
+            `SELECT 
+            actors.id as 'id', login, avatar_url
+            FROM events INNER JOIN actors 
+            ON events.fk_actorId = actors.id
+            GROUP BY fk_actorId
+            ORDER BY COUNT(fk_actorId) DESC,
+            created_at DESC`;
+
+        return this.all(command);
+    }
+
+    getActorsOrderedByDateAndName() {
+        const command = `
+            SELECT 
+            fk_actorId as 'id', login, avatar_url,
+            created_at
+            FROM events INNER JOIN actors 
+            ON actors.id=events.fk_actorId 
+            ORDER BY DATE(created_at) DESC, login ASC`;
 
         return this.all(command);
     }
